@@ -6,7 +6,10 @@ module.exports = {
     devServer: {
         contentBase: __dirname,
         compress: true,
-        port: 9000
+        port: 9000,
+        historyApiFallback: {
+            index: 'index.htm'
+        }
     },
     entry: {
         'scripts/solar-system.js': "./src/scripts/app.ts",
