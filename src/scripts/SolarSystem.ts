@@ -9,8 +9,6 @@ import { BaseSolarSystem } from './BaseSolarSystem';
 export class SolarSystem extends BaseSolarSystem {
 
     protected setup(): void {
-        this.camera.position.z = 500;
-
         LightFactory.addAmbientMainDirectionalLight(this.scene);
 
         // const sun: Sun = new Sun();
