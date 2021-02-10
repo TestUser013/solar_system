@@ -1,14 +1,7 @@
 import * as THREE from 'three';
 import { BaseSolarSystem } from './BaseSolarSystem';
 
-export class MainCamera {
-
-    public camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
-        50,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        2000
-    );
+export class MainCamera extends THREE.PerspectiveCamera {
 
     private mouse: {
         x: number;
@@ -21,8 +14,6 @@ export class MainCamera {
     private movementDelta: number = 5;
 
     private rotationDelta: number = 0.01;
-
-    private positionLimit: number = 500;
 
     private hasMousemoveListener: boolean;
 
@@ -47,6 +38,7 @@ export class MainCamera {
         private creator: BaseSolarSystem,
         private scene: THREE.Scene,
     ) {
+        super(50, window.innerWidth / window.innerHeight, 0.1, 4100);
         this.initCameraPosition();
         this.trackMouseMove();
         this.setupCameraControlsToggle();
@@ -70,16 +62,16 @@ export class MainCamera {
     }
 
     public keypressEventListener(event: KeyboardEvent): void {
-        if (event.key === ' ') { // Space
-            this.camera.lookAt(this.scene.position);
+        if (event.key === 'c') {
+            this.lookAt(this.scene.position);
         }
     }
 
     private initCameraPosition(): void {
-        this.camera.position.x = 0;
-        this.camera.position.y = 0;
-        this.camera.position.z = 500;
-        this.camera.lookAt(this.scene.position);
+        this.position.x = 0;
+        this.position.y = 0;
+        this.position.z = 500;
+        this.lookAt(this.scene.position);
     }
 
     private setupCameraControlsToggle(): void {
@@ -101,9 +93,9 @@ export class MainCamera {
         this.creator.addAnimation({
             subscriber: 'mousemove',
             callback: () => {
-                this.camera.position.x += (this.mouse.x * 1000 - this.camera.position.x) * 0.6;
-                this.camera.position.y += (this.mouse.y * 1000 - this.camera.position.y) * 0.6;
-                this.camera.lookAt(this.scene.position);
+                this.position.x += (this.mouse.x * 1000 - this.position.x) * 0.6;
+                this.position.y += (this.mouse.y * 1000 - this.position.y) * 0.6;
+                this.lookAt(this.scene.position);
             }
         });
     }
@@ -137,64 +129,75 @@ export class MainCamera {
         this.creator.deleteAnimation(key);
     }
 
+    private isOutOfLimitedSpace(): boolean {
+        const polarRadius: number = Math.sqrt(Math.pow(this.position.x, 2) + Math.pow(this.position.y, 2) + Math.pow(this.position.z, 2));
+        return polarRadius > 1000 || polarRadius < 160;
+    }
+
     private moveForward(): void {
-        if (this.camera.position.z >= -this.positionLimit) {
-            this.camera.translateZ(-this.movementDelta);
+        this.translateZ(-this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveBack();
         }
     }
 
     private moveBack(): void {
-        if (this.camera.position.z <= this.positionLimit) {
-            this.camera.translateZ(this.movementDelta);
+        this.translateZ(this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveForward();
         }
     }
 
     private moveLeft(): void {
-        if (this.camera.position.x >= -this.positionLimit) {
-            this.camera.translateX(-this.movementDelta);
+        this.translateX(-this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveRight();
         }
     }
 
     private moveRight(): void {
-        if (this.camera.position.x <= this.positionLimit) {
-            this.camera.translateX(this.movementDelta);
+        this.translateX(this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveLeft();
         }
     }
 
     private moveDown(): void {
-        if (this.camera.position.y >= -this.positionLimit) {
-            this.camera.translateY(-this.movementDelta);
+        this.translateY(-this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveUp();
         }
     }
 
     private moveUp(): void {
-        if (this.camera.position.y <= this.positionLimit) {
-            this.camera.translateY(this.movementDelta);
+        this.translateY(this.movementDelta);
+        if (this.isOutOfLimitedSpace()) {
+            this.moveDown();
         }
     }
 
     private rotateUp(): void {
-        this.camera.rotation.x += this.rotationDelta;
+        this.rotateX(+this.rotationDelta);
     }
 
     private rotateDown(): void {
-        this.camera.rotation.x -= this.rotationDelta;
+        this.rotateX(-this.rotationDelta);
     }
 
     private rotateLeft(): void {
-        this.camera.rotation.y += this.rotationDelta;
+        this.rotateY(+this.rotationDelta);
     }
 
     private rotateRight(): void {
-        this.camera.rotation.y -= this.rotationDelta;
+        this.rotateY(-this.rotationDelta);
     }
 
     private rotateAroundLeft(): void {
-        this.camera.rotation.z += this.rotationDelta;
+        this.rotateZ(+this.rotationDelta);
     }
 
     private rotateAroundRight(): void {
-        this.camera.rotation.z -= this.rotationDelta;
+        this.rotateZ(-this.rotationDelta);
     }
 
 }

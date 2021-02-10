@@ -9,7 +9,7 @@ export abstract class Stars {
             map: texture,
             side: THREE.BackSide
         });
-        const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(600, 32, 32);
+        const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(2000, 32, 32);
         const mesh: THREE.Mesh = new THREE.Mesh(geometry, material);
         return mesh;
     }
