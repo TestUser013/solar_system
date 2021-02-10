@@ -52,8 +52,8 @@ export abstract class BaseSolarSystem {
             return;
         }
         this.renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-        this.mainCamera.camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        this.mainCamera.camera.updateProjectionMatrix();
+        this.mainCamera.aspect = canvas.clientWidth / canvas.clientHeight;
+        this.mainCamera.updateProjectionMatrix();
     }
 
     private animate(): void {
@@ -62,7 +62,7 @@ export abstract class BaseSolarSystem {
             animation.callback();
         });
         this.resizeRenderer();
-        this.renderer.render(this.scene, this.mainCamera.camera);
+        this.renderer.render(this.scene, this.mainCamera);
     }
 
 }
