@@ -5,6 +5,8 @@ import { Stars } from './Stars';
 
 export abstract class BaseSolarSystem {
 
+    private animations: AnimationsRequest[] = [];
+
     protected renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
         antialias: true,
     });
@@ -12,8 +14,6 @@ export abstract class BaseSolarSystem {
     protected scene: THREE.Scene = new THREE.Scene();
 
     protected mainCamera: MainCamera;
-
-    private animations: AnimationsRequest[] = [];
 
     constructor() {
         this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -23,8 +23,6 @@ export abstract class BaseSolarSystem {
         this.createStars();
         this.setup();
     }
-
-    protected abstract setup(): void;
 
     public addAnimation(animation: AnimationsRequest): void {
         this.animations.push(animation);
@@ -64,5 +62,7 @@ export abstract class BaseSolarSystem {
         this.resizeRenderer();
         this.renderer.render(this.scene, this.mainCamera);
     }
+
+    protected abstract setup(): void;
 
 }

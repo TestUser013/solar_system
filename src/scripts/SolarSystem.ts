@@ -5,7 +5,6 @@ import { Sun } from './planets/Sun';
 import { Earth } from './planets/Earth';
 import { BaseSolarSystem } from './BaseSolarSystem';
 
-
 export class SolarSystem extends BaseSolarSystem {
 
     protected setup(): void {

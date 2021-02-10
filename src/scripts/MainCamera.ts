@@ -20,18 +20,18 @@ export class MainCamera extends THREE.PerspectiveCamera {
     private keyboardControls: {
         [key: string]: string;
     } = {
-        "w": "moveForward",
-        "s": "moveBack",
-        "a": "moveLeft",
-        "d": "moveRight",
-        "z": "moveUp",
-        "x": "moveDown",
-        "q": "rotateAroundLeft",
-        "e": "rotateAroundRight",
-        "ArrowUp": "rotateUp",
-        "ArrowDown": "rotateDown",
-        "ArrowLeft": "rotateLeft",
-        "ArrowRight": "rotateRight",
+        'w': 'moveForward',
+        's': 'moveBack',
+        'a': 'moveLeft',
+        'd': 'moveRight',
+        'z': 'moveUp',
+        'x': 'moveDown',
+        'q': 'rotateAroundLeft',
+        'e': 'rotateAroundRight',
+        'ArrowUp': 'rotateUp',
+        'ArrowDown': 'rotateDown',
+        'ArrowLeft': 'rotateLeft',
+        'ArrowRight': 'rotateRight',
     };
 
     constructor(
@@ -89,33 +89,33 @@ export class MainCamera extends THREE.PerspectiveCamera {
 
     private trackMouseMove(): void {
         this.hasMousemoveListener = true;
-        document.addEventListener('mousemove', this.mousemoveEventListener.bind(this), false)
+        document.addEventListener('mousemove', this.mousemoveEventListener.bind(this), false);
         this.creator.addAnimation({
             subscriber: 'mousemove',
             callback: () => {
                 this.position.x += (this.mouse.x * 1000 - this.position.x) * 0.6;
                 this.position.y += (this.mouse.y * 1000 - this.position.y) * 0.6;
                 this.lookAt(this.scene.position);
-            }
+            },
         });
     }
 
     private stopTrackMouseMove(): void {
         this.hasMousemoveListener = false;
-        document.removeEventListener('mousemove', this.mousemoveEventListener);
+        document.removeEventListener('mousemove', this.mousemoveEventListener.bind(this));
         this.creator.deleteAnimation('mousemove');
     }
 
     private trackArrowKeys(): void {
-        document.addEventListener("keydown", this.keydownEventListener.bind(this));
-        document.addEventListener("keyup", this.keyupEventListener.bind(this));
-        document.addEventListener("keypress", this.keypressEventListener.bind(this));
+        document.addEventListener('keydown', this.keydownEventListener.bind(this));
+        document.addEventListener('keyup', this.keyupEventListener.bind(this));
+        document.addEventListener('keypress', this.keypressEventListener.bind(this));
     }
 
     private stopTrackArrowKeys(): void {
-        document.removeEventListener("keydown", this.keydownEventListener);
-        document.removeEventListener("keyup", this.keyupEventListener);
-        document.removeEventListener("keypress", this.keypressEventListener);
+        document.removeEventListener('keydown', this.keydownEventListener.bind(this));
+        document.removeEventListener('keyup', this.keyupEventListener.bind(this));
+        document.removeEventListener('keypress', this.keypressEventListener.bind(this));
     }
 
     private startCameraMovement(key: string): void {
@@ -177,7 +177,7 @@ export class MainCamera extends THREE.PerspectiveCamera {
     }
 
     private rotateUp(): void {
-        this.rotateX(+this.rotationDelta);
+        this.rotateX(this.rotationDelta);
     }
 
     private rotateDown(): void {
@@ -185,7 +185,7 @@ export class MainCamera extends THREE.PerspectiveCamera {
     }
 
     private rotateLeft(): void {
-        this.rotateY(+this.rotationDelta);
+        this.rotateY(this.rotationDelta);
     }
 
     private rotateRight(): void {
@@ -193,7 +193,7 @@ export class MainCamera extends THREE.PerspectiveCamera {
     }
 
     private rotateAroundLeft(): void {
-        this.rotateZ(+this.rotationDelta);
+        this.rotateZ(this.rotationDelta);
     }
 
     private rotateAroundRight(): void {
