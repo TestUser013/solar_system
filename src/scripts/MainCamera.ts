@@ -130,8 +130,8 @@ export class MainCamera extends THREE.PerspectiveCamera {
     }
 
     private isOutOfLimitedSpace(): boolean {
-        return Math.sqrt(this.position.x * this.position.x + this.position.y * this.position.y + this.position.z * this.position.z) > 1000
-            || Math.sqrt(this.position.x * this.position.x + this.position.y * this.position.y + this.position.z * this.position.z) < 160;
+        const polarRadius: number = Math.sqrt(Math.pow(this.position.x, 2) + Math.pow(this.position.y, 2) + Math.pow(this.position.z, 2));
+        return polarRadius > 1000 || polarRadius < 160;
     }
 
     private moveForward(): void {
