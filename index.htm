@@ -13,8 +13,56 @@
 </head>
 
 <body>
-    <div class="controls">
-        <button type="button" id="camera-toggle">Mouse / Keyboard</button>
+    <div class="controls-hint">
+        Press [g] to toggle main camera controls between mouse and keyboard.
+    </div>
+    <div class="info-movement" style="display: none;">
+        <div class="control middle" style="grid-area: w;">
+            <span class="button-info">&#8657;</span>
+            <span class="button-block">W</span>
+        </div>
+        <div class="control middle" style="grid-area: s;">
+            <span class="button-block">S</span>
+            <span class="button-info">&#8659;</span>
+        </div>
+        <div class="control" style="grid-area: a;">
+            <span class="button-info">&#8592;</span>
+            <span class="button-block">A</span>
+        </div>
+        <div class="control" style="grid-area: d;">
+            <span class="button-block">D</span>
+            <span class="button-info">&#8594;</span>
+        </div>
+        <div class="control" style="grid-area: q;">
+            <span class="button-info">&#8630;</span>
+            <span class="button-block">Q</span>
+        </div>
+        <div class="control" style="grid-area: e;">
+            <span class="button-block">E</span>
+            <span class="button-info">&#8631;</span>
+        </div>
+        <div class="control" style="grid-area: z;">
+            <span class="button-info">&#8593;</span>
+            <span class="button-block">Z</span>
+        </div>
+        <div class="control" style="grid-area: x;">
+            <span class="button-block">X</span>
+            <span class="button-info">&#8595;</span>
+        </div>
+    </div>
+    <div class="info-rotation" style="display: none;">
+        <div class="control" style="grid-area: ArrowLeft;">
+            <span class="button-block">&#8592;</span>
+        </div>
+        <div class="control" style="grid-area: ArrowRight;">
+            <span class="button-block">&#8594;</span>
+        </div>
+        <div class="control" style="grid-area: ArrowUp;">
+            <span class="button-block">&#8593;</span>
+        </div>
+        <div class="control" style="grid-area: ArrowDown;">
+            <span class="button-block">&#8595;</span>
+        </div>
     </div>
     <script src="./scripts/solar-system.js"></script>
 </body>
