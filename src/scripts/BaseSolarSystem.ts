@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { AnimationsRequest } from './SolarSystemInterfaces';
 import { MainCamera } from './MainCamera';
+import { MovementController } from './MovementController';
 import { Stars } from './Stars';
 
 export abstract class BaseSolarSystem {
@@ -15,28 +16,39 @@ export abstract class BaseSolarSystem {
 
     protected mainCamera: MainCamera;
 
+    protected movementController: MovementController;
+
     constructor() {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(this.renderer.domElement);
         this.setupMainCamera();
+        this.setupMovementController();
         this.animate();
         this.createStars();
         this.setup();
     }
 
     public addAnimation(animation: AnimationsRequest): void {
-        this.animations.push(animation);
+        if (this.animations.every((anim: AnimationsRequest) => anim.subscriber !== animation.subscriber)) {
+            this.animations.push(animation);
+        }
     }
 
     public deleteAnimation(subscriber: string): void {
         const index: number = this.animations.findIndex((animation: AnimationsRequest) => {
             return animation.subscriber === subscriber;
         });
-        this.animations.splice(index, 1);
+        if (index !== -1) {
+            this.animations.splice(index, 1);
+        }
     }
 
     private setupMainCamera(): void {
-        this.mainCamera = new MainCamera(this, this.scene);
+        this.mainCamera = new MainCamera(this.scene);
+    }
+
+    private setupMovementController(): void {
+        this.movementController = new MovementController(this, this.mainCamera);
     }
 
     private createStars(): void {

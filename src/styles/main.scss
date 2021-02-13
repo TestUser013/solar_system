@@ -1,8 +1,12 @@
 $black-color: #000000;
+$button-color: #ffffff;
+$button-highlight-color: #00ff00;
 
 html, body {
     margin: 0;
     height: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
 }
 
 canvas {
@@ -11,6 +15,76 @@ canvas {
     height: 100%;
 }
 
-.controls {
+.controls-hint {
     position: absolute;
+    color: #cccccc;
 }
+
+@mixin info-panel {
+    position: absolute;
+    box-sizing: border-box;
+    border-radius: 1rem;
+    background-color: rgba(0, 128, 0, .3);
+    border: .1rem solid rgba(0, 255, 0, .3);
+    padding: 1rem;
+    display: grid;
+
+    .control {
+        display: inline-block;
+        line-height: 1.6em;
+        color: $button-color;
+        text-align: center;
+        font-weight: bold;
+        align-items: center;
+
+        &.middle span {
+            display: block;
+            margin: 0 auto;
+        }
+
+        &.highlight .button-block {
+            color: $button-highlight-color;
+            border-color: $button-highlight-color;
+        }
+
+        .button-block {
+            display: inline-block;
+            width: 1.6em;
+            border: .2rem solid $button-color;
+            border-radius: .5rem;
+        }
+
+        .button-info {
+            display: inline-block;
+            width: 1em;
+        }
+    }
+}
+
+.info-movement {
+    @include info-panel();
+    right: 1rem;
+    bottom: 1rem;
+    width: 12rem;
+    height: 10rem;
+    grid-template-areas:
+        "q q w w e e"
+        "q q w w e e"
+        "a a w w d d"
+        "a a s s d d"
+        "z z s s x x"
+        "z z s s x x";
+}
+
+.info-rotation {
+    @include info-panel();
+    right: 1rem;
+    top: 1rem;
+    width: 9rem;
+    height: 6.6rem;
+    grid-template-areas:
+        ". ArrowUp ."
+        "ArrowLeft ArrowDown ArrowRight"
+}
+
+
