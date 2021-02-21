@@ -1,6 +1,7 @@
 import { BaseSolarSystem } from './BaseSolarSystem';
 import { MainCamera } from './MainCamera';
 import { InfoPanelController } from './InfoPanelController';
+import { EventListenersManager } from './EventListenersManager';
 
 export class MovementController {
 
@@ -39,9 +40,9 @@ export class MovementController {
 
     constructor(
         private creator: BaseSolarSystem,
+        private eventListenersManager: EventListenersManager,
         private camera: MainCamera,
     ) {
-        this.bindEventListeners();
         this.setupInfoPanels();
         this.setupCameraControls();
     }
@@ -84,20 +85,19 @@ export class MovementController {
         this.mouse.y = (event.clientY / window.innerHeight) - 0.5;
     }
 
-    private bindEventListeners(): void {
-        this.keyupEventListener = this.keyupEventListener.bind(this);
-        this.keydownEventListener = this.keydownEventListener.bind(this);
-        this.keypressEventListener = this.keypressEventListener.bind(this);
-        this.mousemoveEventListener = this.mousemoveEventListener.bind(this);
-    }
-
     private setupCameraControls(): void {
         this.trackMouseMove();
         this.infoPanels.forEach((panel: InfoPanelController) => {
             panel.hide();
         });
 
-        document.addEventListener('keypress', this.keypressEventListener);
+        this.eventListenersManager.addEventListener(
+            'keypress',
+            {
+                subscriber: MovementController.name,
+                callback: this.keypressEventListener.bind(this),
+            },
+        );
     }
 
     private setupInfoPanels(): void {
@@ -107,7 +107,15 @@ export class MovementController {
 
     private trackMouseMove(): void {
         this.hasMousemoveListener = true;
-        document.addEventListener('mousemove', this.mousemoveEventListener, false);
+
+        this.eventListenersManager.addEventListener(
+            'mousemove',
+            {
+                subscriber: MovementController.name,
+                callback: this.mousemoveEventListener.bind(this),
+            },
+        );
+
         this.creator.addAnimation({
             subscriber: 'mousemove',
             callback: () => {
@@ -120,21 +128,36 @@ export class MovementController {
 
     private stopTrackMouseMove(): void {
         this.hasMousemoveListener = false;
-        document.removeEventListener('mousemove', this.mousemoveEventListener);
+
+        this.eventListenersManager.removeEventListener('mousemove', MovementController.name);
+
         this.creator.deleteAnimation('mousemove');
     }
 
     private trackArrowKeys(): void {
-        document.addEventListener('keydown', this.keydownEventListener);
-        document.addEventListener('keyup', this.keyupEventListener);
+        this.eventListenersManager.addEventListener(
+            'keydown',
+            {
+                subscriber: MovementController.name,
+                callback: this.keydownEventListener.bind(this),
+            },
+        );
+
+        this.eventListenersManager.addEventListener(
+            'keyup',
+            {
+                subscriber: MovementController.name,
+                callback: this.keyupEventListener.bind(this),
+            },
+        );
     }
 
     private stopTrackArrowKeys(): void {
         Object.keys(this.keyboardControls).forEach((key: string) => {
             this.creator.deleteAnimation(key);
         });
-        document.removeEventListener('keydown', this.keydownEventListener);
-        document.removeEventListener('keyup', this.keyupEventListener);
+        this.eventListenersManager.removeEventListener('keydown', MovementController.name);
+        this.eventListenersManager.removeEventListener('keyup', MovementController.name);
     }
 
     private startCameraMovement(key: string): void {

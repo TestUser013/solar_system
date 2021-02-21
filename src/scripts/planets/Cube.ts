@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { BasePlanet } from './BasePlanet';
 import { PlanetName } from '../SolarSystemEnums';
 
-
 export class Cube extends BasePlanet {
 
     constructor () {
@@ -11,7 +10,7 @@ export class Cube extends BasePlanet {
 
         const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 2);
         const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({
-            color: 0x00ff00
+            color: 0x00ff00,
         });
         this.mesh = new THREE.Mesh(geometry, material);
     }
