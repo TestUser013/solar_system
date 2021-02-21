@@ -15,13 +15,15 @@ export class Earth extends BasePlanet {
         super();
         this.name = PlanetName.Earth;
 
-        const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(150, 64, 64);
+        const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(150, 128, 128);
 
         const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({
-            map: new THREE.TextureLoader().load('images/earthmap2k.jpg'),
-            specularMap: new THREE.TextureLoader().load('images/earthspec2k.jpg'),
-            normalMap: new THREE.TextureLoader().load('images/earthnormal2k.jpg'),
-            normalScale: new THREE.Vector2(2, 3),
+            map: new THREE.TextureLoader().load('./images/earthmap10k.jpg'),
+            specularMap: new THREE.TextureLoader().load('./images/earthspec10k.jpg'),
+            // normalMap: new THREE.TextureLoader().load('./images/earthnormal2k.jpg'),
+            bumpMap: new THREE.TextureLoader().load('./images/earthbump10k.jpg'),
+            bumpScale: 0.8,
+            // normalScale: new THREE.Vector2(2, 3),
             specular: new THREE.Color('grey'),
         });
 
