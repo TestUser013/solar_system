@@ -1,11 +1,17 @@
 import * as THREE from 'three';
 import { BasePlanet } from './BasePlanet';
 import { PlanetName } from '../SolarSystemEnums';
-
+import { EventListenersManager } from '../EventListenersManager';
 
 export class Earth extends BasePlanet {
 
-    constructor() {
+    private rotationDelta: number = 0.005;
+
+    private rotationMeshDelta: number = 0.0045;
+
+    constructor(
+        private eventListenersManager: EventListenersManager,
+    ) {
         super();
         this.name = PlanetName.Earth;
 
@@ -21,6 +27,32 @@ export class Earth extends BasePlanet {
 
         this.mesh = new THREE.Mesh(geometry, material);
         this.additionalMeshes.push(this.createEarthCloud());
+        this.setupEventListeners();
+    }
+
+    public animation(): void {
+        this.mesh.rotation.y += this.rotationDelta;
+        this.additionalMeshes.forEach((mesh: THREE.Mesh) => {
+            mesh.rotation.y += this.rotationMeshDelta;
+        });
+    }
+
+    private setupEventListeners(): void {
+        this.eventListenersManager.addEventListener(
+            'keypress',
+            {
+                subscriber: Earth.name,
+                callback: (event: KeyboardEvent) => {
+                    if (event.key === '+') {
+                        this.rotationDelta += 0.001;
+                        this.rotationMeshDelta += 0.001;
+                    } else if (event.key === '-') {
+                        this.rotationDelta -= 0.001;
+                        this.rotationMeshDelta -= 0.001;
+                    }
+                },
+            },
+        );
     }
 
     private createEarthCloud(): THREE.Mesh {
@@ -31,7 +63,7 @@ export class Earth extends BasePlanet {
         const contextResult: CanvasRenderingContext2D = canvasResult.getContext('2d');
 
         // load earthcloudmap
-        const imageMap = new Image();
+        const imageMap: HTMLImageElement = new Image();
         imageMap.addEventListener('load', () => {
 
             // create dataMap ImageData for earthcloudmap
@@ -44,16 +76,16 @@ export class Earth extends BasePlanet {
 
             // load earthcloudmaptrans
             const imageTrans: HTMLImageElement = new Image();
-            imageTrans.addEventListener("load", () => {
+            imageTrans.addEventListener('load', () => {
                 // create dataTrans ImageData for earthcloudmaptrans
                 const canvasTrans: HTMLCanvasElement = document.createElement('canvas');
                 canvasTrans.width = imageTrans.width;
                 canvasTrans.height = imageTrans.height;
                 const contextTrans: CanvasRenderingContext2D = canvasTrans.getContext('2d');
                 contextTrans.drawImage(imageTrans, 0, 0);
-                const dataTrans = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
+                const dataTrans: ImageData = contextTrans.getImageData(0, 0, canvasTrans.width, canvasTrans.height);
                 // merge dataMap + dataTrans into dataResult
-                const dataResult = contextMap.createImageData(canvasMap.width, canvasMap.height);
+                const dataResult: ImageData = contextMap.createImageData(canvasMap.width, canvasMap.height);
                 for (let y = 0, offset = 0; y < imageMap.height; y++) {
                     for (let x = 0; x < imageMap.width; x++, offset += 4) {
                         dataResult.data[offset + 0] = dataMap.data[offset + 0];
@@ -70,22 +102,14 @@ export class Earth extends BasePlanet {
         }, false);
         imageMap.src = './images/earthcloudmap.jpg';
 
-        const geometry = new THREE.SphereGeometry(155, 64, 64)
-        const material = new THREE.MeshPhongMaterial({
+        const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(155, 64, 64)
+        const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({
             map: new THREE.Texture(canvasResult),
             side: THREE.DoubleSide,
             transparent: true,
             opacity: 0.8,
         })
         return new THREE.Mesh(geometry, material);
-    }
-
-    public animation(): void {
-        // this.mesh.rotation.x += 0.01;
-        this.mesh.rotation.y += 0.005;
-        this.additionalMeshes.forEach((mesh: THREE.Mesh) => {
-            mesh.rotation.y += 0.0045;
-        });
     }
 
 }

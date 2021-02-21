@@ -17,7 +17,7 @@ export class SolarSystem extends BaseSolarSystem {
         //     callback: () => sun.animation(),
         // });
 
-        const earth: Earth = new Earth();
+        const earth: Earth = new Earth(this.eventListenersManager);
         this.scene.add(earth.mesh);
         this.scene.add(...earth.additionalMeshes);
         this.addAnimation({
