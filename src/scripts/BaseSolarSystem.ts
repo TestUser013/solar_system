@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { AnimationsRequest } from './SolarSystemInterfaces';
+import { EventListenersManager } from './EventListenersManager';
 import { MainCamera } from './MainCamera';
 import { MovementController } from './MovementController';
 import { Stars } from './Stars';
@@ -18,9 +19,12 @@ export abstract class BaseSolarSystem {
 
     protected movementController: MovementController;
 
+    protected eventListenersManager: EventListenersManager;
+
     constructor() {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(this.renderer.domElement);
+        this.setupServices();
         this.setupMainCamera();
         this.setupMovementController();
         this.animate();
@@ -43,12 +47,20 @@ export abstract class BaseSolarSystem {
         }
     }
 
+    private setupServices(): void {
+        this.eventListenersManager = new EventListenersManager();
+    }
+
     private setupMainCamera(): void {
         this.mainCamera = new MainCamera(this.scene);
     }
 
     private setupMovementController(): void {
-        this.movementController = new MovementController(this, this.mainCamera);
+        this.movementController = new MovementController(
+            this,
+            this.eventListenersManager,
+            this.mainCamera
+        );
     }
 
     private createStars(): void {
