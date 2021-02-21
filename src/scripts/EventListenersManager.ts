@@ -30,7 +30,7 @@ export class EventListenersManager {
 
     private callSubscribers<T extends keyof DocumentEventMap>(
         eventName: keyof DocumentEventMap,
-        event: DocumentEventMap[T]
+        event: DocumentEventMap[T],
     ): void {
         this.eventMapObject[eventName].listeners.forEach((subscriber: Listener<keyof DocumentEventMap>) => {
             subscriber.callback(event);
@@ -42,7 +42,7 @@ export class EventListenersManager {
             return -1;
         }
         return this.eventMapObject[event].listeners
-            .findIndex((listener: Listener) => listener.subscriber === subscriber);
+            .findIndex((listener: Listener<keyof DocumentEventMap>) => listener.subscriber === subscriber);
     }
 
 }
