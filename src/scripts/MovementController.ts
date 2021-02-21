@@ -5,9 +5,9 @@ import { EventListenersManager } from './EventListenersManager';
 
 export class MovementController {
 
-    private movementDelta: number = 5;
+    private movementDelta: number = 3;
 
-    private rotationDelta: number = 0.01;
+    private rotationDelta: number = 0.003;
 
     private hasMousemoveListener: boolean;
 
